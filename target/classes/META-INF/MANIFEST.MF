@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: feedback
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: Playdata
+Implementation-Vendor-Id: encore
+Build-Jdk: 1.8.0_211
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/feedback
+Created-By: Maven Integration for Eclipse
+
