@@ -11,13 +11,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @CrossOrigin(origins = { "http://127.0.0.1:8000", "http://localhost:8000" })
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class })
+@EnableAutoConfiguration
 @ComponentScan({ "feedback.controller", "feedback.service", "feedback.model.*" })
 public class FeedbackApplication {
-	
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(FeedbackApplication.class);
-	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(FeedbackApplication.class, args);
