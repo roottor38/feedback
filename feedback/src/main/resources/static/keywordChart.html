@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!-- Include FusionCharts core file -->
+<script type="text/javascript"
+	src="https://cdn.fusioncharts.com/fusioncharts/latest/fusioncharts.js"></script>
+
+<!-- Include FusionCharts Theme file -->
+<script type="text/javascript"
+	src="https://cdn.fusioncharts.com/fusioncharts/latest/themes/fusioncharts.theme.fusion.js"></script>
+<title>Document</title>
+<style>
+#chart-container {
+	height: 500px;
+}
+</style>
+</head>
+<body>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<br><hr><br>
+	
+	<button onclick="keyDraw()">Keyword Chart Drawing</button>
+	<div id="chart-container"></div>
+	
+	<script>
+		data = [
+		      {
+		          label: "계정",
+		          value: "12"
+		        },
+		        {
+		          label: "서버",
+		          value: "12"
+		        },
+		        {
+		          label: "다야",
+		          value: "10"
+		        },
+		        {
+		          label: "이다",
+		          value: "10"
+		        },
+		        {
+		          label: "뭘봐",
+		          value: "10"
+		        }
+		      ]
+		
+        const dataSource = {
+    chart: {
+      caption: "리니지M 키워드 Top 5",
+      subcaption: "2019.12.03~2019.12.04",
+      showpercentvalues: "1",
+      defaultcenterlabel: "전체 커뮤니티",
+      aligncaptionwithcanvas: "0",
+      captionpadding: "0",
+      decimals: "1",
+      
+      centerlabel: "# Users: $value",
+      theme: "fusion"
+    },
+    data
+  };
+  
+    function keyDraw () {
+	    var myChart = new FusionCharts({
+	      type: "doughnut2d",
+	      renderAt: "chart-container",
+	      width: "100%",
+	      height: "100%",
+	      dataFormat: "json",
+	      dataSource
+	    }).render();
+	  };
+    </script>
+
+</body>
+</html>
