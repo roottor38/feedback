@@ -22,7 +22,7 @@ public class FeedbackService {
 		for(int i = 0; i < 5; i++) {
 			wordCount.add((JSONObject) apiTool.getWordCount().get(i));
 		}
-		return wordCount;
+		return wordCount; 
 
 	}
 }
