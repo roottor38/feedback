@@ -16,7 +16,7 @@ class WordCount:
         self.result = dict(filter(lambda x: x[1] >= 5, Counter(list(filter(lambda x: len(x) > 1, Okt().nouns(self.text)))).most_common()))
         print(self.result)
     def check_index(self, opt=True):
-        if not opt and self.es.indices.exists(self.name):
+        if not opt and self.es.indices.exists(self.name + "_analysis"):
             print("# 해당 인덱스 초기화를 위한 삭제")
             self.es.indices.delete(self.name + "_analysis")
         if not self.es.indices.exists(self.name + "_analysis"):
