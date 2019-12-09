@@ -57,7 +57,7 @@ class DataCollector:
             }
             self.es.indices.create(index=self.name, body=body)
             print("# 해당 인덱스 생성 완료")
-    def scrape_urls(self, url, pages=1):
+    def scrape_urls(self, url, pages=10):
         print("# URL 수집 시작")
         self.lastnum = self.es.count(index=self.name, body={"query" : {"match_all" : {}}})['count']
         if not self.lastnum == 0: 
@@ -65,7 +65,7 @@ class DataCollector:
             print(self.lasturl)
         for i in range(1, pages+1):
             print("Page", i)
-            sleep(0.3)
+            sleep(0.1)
             for soup in BeautifulSoup(requests.get(url, params={"p" : i}).text, "lxml").select(".tr a"):
                 url = re.search(r'\S+/\d+/\d+', soup['href']).group()
                 if url == self.lasturl:
@@ -79,7 +79,7 @@ class DataCollector:
             return
         bulk_body = []
         for i, el in enumerate(reversed(self.urls)):    
-            print(el)
+            print(i, el)
             sleep(0.1)
             bulk_body.append({"create" : {"_index" : self.name, "_id" : self.lastnum + i + 1}})
             soup = BeautifulSoup(requests.get(el).text, "lxml")
@@ -92,12 +92,15 @@ class DataCollector:
                         "commments" : int(re.search(r'[0-9,]+', soup.select_one(".articleBottomMenu").text).group().replace(",", "")),
                         "recommand" : int(re.search(r'[0-9,]+', soup.select_one(".reqnum").text).group().replace(",", ""))
                         })
+            if (i + 1) % 100 == 0:
+                self.es.bulk(index=self.name, body=bulk_body)
+                self.es.indices.refresh(index=self.name)
+                print("# 중간 저장")
+                bulk_body.clear()
         self.es.bulk(index=self.name, body=bulk_body)
-        print("# 벌크 저장 완료")
         self.es.indices.refresh(index=self.name)
-        print("# 엘라스틱 서치 반영 완료")
-  
+        print("# 최종 저장") 
 collector = DataCollector(name="community_data")
 collector.check_index(opt=False)
-collector.scrape_urls("http://www.inven.co.kr/board/lineagem/5019", pages=10)
+collector.scrape_urls("http://www.inven.co.kr/board/lineagem/5019", pages=60)
 collector.scrape_bodies()
