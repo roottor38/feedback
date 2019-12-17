@@ -3,7 +3,7 @@ from time import sleep
 from bs4 import BeautifulSoup
 import re, requests
 class DataCollector:
-    def __init__(self, name, host="192.168.1.4:9200"):
+    def __init__(self, name, host="192.168.1.3:9200"):
         self.es = Elasticsearch(hosts=host)
         self.name = name
         self.urls = []
@@ -86,29 +86,30 @@ class DataCollector:
             print("# 우선 URL 수집을 진행해주세요!")
             #리턴을 왜 빈값으로?
             return
-        bulk_body = []
+        fileName = "test0.csv"
+        
         for i, el in enumerate(reversed(self.urls)):    
             print(i, el)
             sleep(0.1)
-            bulk_body.append({"create" : {"_index" : self.name, "_id" : self.lastnum + i + 1}})
             soup = BeautifulSoup(requests.get(el).text, "lxml")
-            bulk_body.append({"url" : el,
-                        "community" : re.search(r'(.+) \:', soup.select_one("title").text.strip()).group(1),
-                        "title" : soup.select_one(".articleTitle").text.strip(),
-                        "date" : re.search(r'\d{4}-\d{2}-\d{2}', soup.select_one(".articleDate").text.strip()).group(),
-                        "body" : re.sub(r'\xa0', "", soup.select_one("#powerbbsContent").text.strip()),
-                        "hits" : int(re.search(r'[0-9,]+', soup.select_one(".articleHit").text).group().replace(",", "")),
-                        "commments" : int(re.search(r'[0-9,]+', soup.select_one(".articleBottomMenu").text).group().replace(",", "")),
-                        "recommand" : int(re.search(r'[0-9,]+', soup.select_one(".reqnum").text).group().replace(",", ""))
-                        })
-            if (i + 1) % 100 == 0:
-                self.es.bulk(index=self.name, body=bulk_body)
-                self.es.indices.refresh(index=self.name)
-                print("# 중간 저장")
-                bulk_body.clear()
-        self.es.bulk(index=self.name, body=bulk_body)
+            #csv_body.append(
+            #    soup.select_one(".articleTitle").text.strip() + ", " + re.sub(r'\xa0', "", soup.select_one("#powerbbsContent").text.strip()) + "\n" 
+            #)
+            #if (i + 1) % 100 == 0:
+            #if (i + 1) % 50 == 0:
+            #f = open("DataCollector"+str(i)+".csv","w", encoding='utf-8')
+            if (i) % 1000 == 0:
+                fileName = "test"+ str((i+1)/1000) +".csv"
+                
+            f = open(fileName, "a", encoding='utf-8')
+            data = re.sub(r'\xa0', "", soup.select_one("#powerbbsContent").text.strip()).replace(",", "")
+            hearder = soup.select_one(".articleTitle").text.strip().replace(",", "")
+            f.write(str(hearder + ", " + data + ", \n" ))
+            f.close()
+            #csv_body.clear()
+      
+
         ##뭐하는 함수지?
-        self.es.indices.refresh(index=self.name)
         print("# 최종 저장") 
 
 

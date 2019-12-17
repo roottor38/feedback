@@ -42,7 +42,7 @@ public class FeedbackDataService {
 
 class HighLevelClient {
 	private RestHighLevelClient client = new RestHighLevelClient(
-			RestClient.builder(new HttpHost("localhost", 9200, "http"), new HttpHost("localhost", 9201, "http")));
+			RestClient.builder(new HttpHost("192.168.1.3", 9200, "http"), new HttpHost("192.168.1.3", 9201, "http")));
 
 	public void close() throws IOException {
 		client.close();
