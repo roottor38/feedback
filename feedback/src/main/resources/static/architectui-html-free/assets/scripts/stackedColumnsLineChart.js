@@ -22,18 +22,12 @@ var dataset = [
 			},
 			{
 				value: "27"
-			},
-			{
-				value: "30"
 			}
 		]
 	},
 	{
 		seriesname: "Neutral",
 		data: [
-			{
-				value: "0"
-			},
 			{
 				value: "0"
 			},
@@ -56,9 +50,6 @@ var dataset = [
 			},
 			{
 				value: "5"
-			},
-			{
-				value: "5.5"
 			}
 		]
 	}
