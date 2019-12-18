@@ -1,61 +1,19 @@
-var category = [
-	{
-		label: "2019-12-09"
-	},
-	{
-		label: "2019-12-10"
-	},
-	{
-		label: "2019-12-11"
-	}
-];
-
-var dataset = [
-	{
-		seriesname: "Positive",
-		data: [
-			{
-				value: "21"
-			},
-			{
-				value: "24"
-			},
-			{
-				value: "27"
-			}
-		]
-	},
-	{
-		seriesname: "Neutral",
-		data: [
-			{
-				value: "0"
-			},
-			{
-				value: "0"
-			},
-			{
-				value: "0"
-			}
-		]
-	},
-	{
-		seriesname: "Negative",
-		data: [
-			{
-				value: "2"
-			},
-			{
-				value: "4"
-			},
-			{
-				value: "5"
-			}
-		]
-	}
-];
-
 (function drawPosNegChart() {
+	axios.get("http://localhost:8000/getRes")
+		.then(resData => {
+			let getres = resData.data;
+			let category = getres[0];
+			let pos = getres[1];
+			let neg = getres[2];
+			console.log(getres);
+			posNegDraw(category, pos, neg);
+		})
+	.catch(error => {
+		console.log("비정상 응답", error);
+	})
+}());
+	
+	posNegDraw = (category, pos, neg) => {
 	var myChart = new FusionCharts({
 		type: "stackedcolumn2dline",
 		renderAt: "chart-container",
@@ -80,7 +38,19 @@ var dataset = [
 					category
 				}
 			],
-			dataset
+			dataset : [
+				{
+					seriesname: "Positive",
+					data: pos
+				},
+				{
+					seriesname: "Neutral",
+				},
+				{
+					seriesname: "Negative",
+					data: neg
+				}
+			]
 		}
 	}).render();
-}());
+};

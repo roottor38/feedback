@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-@ComponentScan({ "feedback.controller", "feedback.service", "feedback.model.*" })
+@ComponentScan({ "feedback.controller", "feedback.service", "feedback.model.*", "feedback.dao" })
 public class FeedbackApplication {
 
 	public static void main(String[] args) {

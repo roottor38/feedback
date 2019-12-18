@@ -3,7 +3,7 @@ from time import sleep
 from bs4 import BeautifulSoup
 import re, requests
 class DataCollector:
-    def __init__(self, name, host="192.168.1.4:9200"):
+    def __init__(self, name, host="192.168.1.3:9200"):
         self.es = Elasticsearch(hosts=host)
         self.name = name
         self.urls = []
