@@ -74,3 +74,5 @@ local.properties
 feedback/py/.ipynb_checkpoints/make_model-checkpoint.ipynb
 feedback/py/pos_tag.csv
 feedback/py/selected_words.csv
+feedback/py/pos_tag.json
+feedback/py/.ipynb_checkpoints/dl_model-checkpoint.ipynb
