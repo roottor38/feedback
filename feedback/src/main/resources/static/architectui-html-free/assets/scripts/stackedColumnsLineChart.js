@@ -64,6 +64,8 @@ var dataset = [
 	}
 ];
 
+var dayMinus1 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-1), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
+
 (function drawPosNegChart() {
 	var myChart = new FusionCharts({
 		type: "stackedcolumn2dline",
@@ -74,7 +76,7 @@ var dataset = [
 		dataSource: {
 			chart: {
 				showvalues: "0",
-				caption: "2019-12-09 ~ 2019-12-16",
+				caption: dayMinus1,
 				subcaption: "",
 				numberprefix: "",
 				numbersuffix: "",
