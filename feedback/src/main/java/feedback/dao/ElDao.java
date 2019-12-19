@@ -34,13 +34,6 @@ public class ElDao {
 	
 	@SuppressWarnings("unchecked")
 	public JSONArray searchRes() throws IOException {
-//		DaoDTO test = new DaoDTO(new SearchRequest("community_data"), 
-//				new SearchSourceBuilder().size(0), AggregationBuilder aggregationBuilder, new UserResDTO(), new JSONArray());
-//	
-//		test.setAggregationBuilder(aggregationBuilder);
-		
-		
-		
 		SearchRequest searchRequest = new SearchRequest("community_data");
 		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().size(0);
 		UserResDTO ur = new UserResDTO();
