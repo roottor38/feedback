@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @SuppressWarnings("unchecked")
-public class ActiveDTO {
+public class VitalDTO {
 	JSONArray array = new JSONArray();
 	
 	public void addData(String date, long value) {

@@ -1,5 +1,5 @@
 (function drawKeywordChart() {
-		axios.get("http://localhost:8000/getKeyword")
+		axios.get("http://localhost:8000/keyword")
 			.then(resData => {
 				data = resData.data;
 				keywordDraw(data)
@@ -20,7 +20,7 @@
 			dataSource: {
 				chart: {
 					caption: "리니지M 키워드",
-					subcaption: "상위 10개 데이터",
+					subcaption: "최근 일주일 합산 상위 10개 데이터",
 					showpercentvalues: "1",
 					defaultcenterlabel: "인벤",
 					aligncaptionwithcanvas: "0",

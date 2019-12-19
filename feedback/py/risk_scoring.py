@@ -30,14 +30,15 @@ class RiskScoring:
             token = tokenize(doc)
             data = np.expand_dims(np.asarray([token.count(word) for word in word_index]).astype('float32'), axis=0)
             score = float(model.predict(data))
-            print(score)
+            print("{:.3f}".format(score))
+            # print(score)
             return score
         self.scored = [scoring(t) for t in self.doc_text]
     def update_es(self):
         bulk_body = []
         for i, el in enumerate(self.scored):    
             bulk_body.append({ "update" : {"_id" : i+1} })
-            bulk_body.append({ "doc" : {"risk" : 1 if el >= 0.65 else 0} })
+            bulk_body.append({ "doc" : {"risk" : 1 if el >= 0.95 else 0} })
             if (i + 1) % 100 == 0:
                 self.es.bulk(index=self.name, body=bulk_body)
                 self.es.indices.refresh(index=self.name)

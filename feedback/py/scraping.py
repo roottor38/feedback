@@ -9,11 +9,9 @@ class DataCollector:
         self.urls = []
         self.lasturl = ""
     def check_index(self, opt=True):
-        ##앞에 왜 not을 넣었는지?
         if not opt and self.es.indices.exists(self.name):
             print("# 해당 인덱스 초기화를 위한 삭제")
             self.es.indices.delete(self.name)
-        ##앞에 왜 not을 넣었는지?
         if not self.es.indices.exists(self.name):
             print("# 해당 인덱스 미존재")
             settings = {
@@ -59,12 +57,9 @@ class DataCollector:
             }
             self.es.indices.create(index=self.name, body=body)#인덱스 생성
             print("# 해당 인덱스 생성 완료")
-    ##
     def scrape_urls(self, url, pages=10):#page는 디폴트로 10
         print("# URL 수집 시작")
-        ##self.lastnum??맴버 변수로 선언을 여기서 처음함? 원래 __init에서 하는것이 아니인가? self
         self.lastnum = self.es.count(index=self.name, body={"query" : {"match_all" : {}}})['count']
-        ##왜 not?
         if not self.lastnum == 0: 
             self.lasturl = self.es.get(index=self.name, id=self.lastnum)['_source']['url']
             print(self.lasturl)
@@ -75,16 +70,12 @@ class DataCollector:
                 url = re.search(r'\S+/\d+/\d+', soup['href']).group()
                 if url == self.lasturl:
                     print("# 이미 수집된 URL => 종료")
-                    #리턴을 왜 빈값으로?
                     return
                 self.urls.append(url)
         print("# URL 수집 완료")
-    
     def scrape_bodies(self):
-        #왜 0이지? None이 아니고? 값이 없을때는 null이 아닌 0값으로 집어 넣었나?
         if len(self.urls) == 0 :
             print("# 우선 URL 수집을 진행해주세요!")
-            #리턴을 왜 빈값으로?
             return
         bulk_body = []
         for i, el in enumerate(reversed(self.urls)):    
@@ -106,9 +97,9 @@ class DataCollector:
                 self.es.indices.refresh(index=self.name)
                 print("# 중간 저장")
                 bulk_body.clear()
-        self.es.bulk(index=self.name, body=bulk_body)
-        ##뭐하는 함수지?
-        self.es.indices.refresh(index=self.name)
+        if len(bulk_body) != 0:
+            self.es.bulk(index=self.name, body=bulk_body)
+            self.es.indices.refresh(index=self.name)
         print("# 최종 저장") 
 
 
