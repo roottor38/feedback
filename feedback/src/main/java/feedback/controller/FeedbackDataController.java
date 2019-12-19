@@ -29,7 +29,7 @@ public class FeedbackDataController {
 	}
 	
 	@GetMapping("/getRes")
-	public ArrayList<UserResDTO> getRes() throws IOException {
+	public JSONArray getRes() throws IOException {
 		return dataService.getRes();
 	}
 }

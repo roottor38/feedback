@@ -1,72 +1,20 @@
-var category = [
-	{
-		label: "2019-12-09"
-	},
-	{
-		label: "2019-12-10"
-	},
-	{
-		label: "2019-12-11"
-	}
-];
-
-var dataset = [
-	{
-		seriesname: "Positive",
-		data: [
-			{
-				value: "21"
-			},
-			{
-				value: "24"
-			},
-			{
-				value: "27"
-			},
-			{
-				value: "30"
-			}
-		]
-	},
-	{
-		seriesname: "Neutral",
-		data: [
-			{
-				value: "0"
-			},
-			{
-				value: "0"
-			},
-			{
-				value: "0"
-			},
-			{
-				value: "0"
-			}
-		]
-	},
-	{
-		seriesname: "Negative",
-		data: [
-			{
-				value: "2"
-			},
-			{
-				value: "4"
-			},
-			{
-				value: "5"
-			},
-			{
-				value: "5.5"
-			}
-		]
-	}
-];
-
 var dayMinus1 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-1), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
-
 (function drawPosNegChart() {
+	axios.get("http://localhost:8000/getRes")
+		.then(resData => {
+			let getres = resData.data;
+			let category = getres[0];
+			let pos = getres[1];
+			let neg = getres[2];
+			console.log(getres);
+			posNegDraw(category, pos, neg);
+		})
+	.catch(error => {
+		console.log("비정상 응답", error);
+	})
+}());
+	
+	posNegDraw = (category, pos, neg) => {
 	var myChart = new FusionCharts({
 		type: "stackedcolumn2dline",
 		renderAt: "chart-container",
@@ -91,7 +39,19 @@ var dayMinus1 = (function formatDate() { var d = new Date(), month = '' + (d.get
 					category
 				}
 			],
-			dataset
+			dataset : [
+				{
+					seriesname: "Positive",
+					data: pos
+				},
+				{
+					seriesname: "Neutral",
+				},
+				{
+					seriesname: "Negative",
+					data: neg
+				}
+			]
 		}
 	}).render();
-}());
+};

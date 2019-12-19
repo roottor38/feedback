@@ -71,7 +71,16 @@ local.properties
 .sts4-cache/
 
 # End of https://www.gitignore.io/api/eclipse
+<<<<<<< HEAD
 feedback/py/pos_tag.json
 feedback/py/pos_tag.zip
 feedback/py/.ipynb_checkpoints/dl_model-checkpoint.ipynb
 feedback/py/.ipynb_checkpoints/make_model-checkpoint.ipynb
+=======
+feedback/py/.ipynb_checkpoints/make_model-checkpoint.ipynb
+feedback/py/pos_tag.csv
+feedback/py/selected_words.csv
+feedback/py/pos_tag.json
+feedback/py/.ipynb_checkpoints/dl_model-checkpoint.ipynb
+feedback/py/pos_tag.zip
+>>>>>>> feature/deep_learning
