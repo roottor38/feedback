@@ -1,5 +1,4 @@
 (function drawKeywordChart() {
-		console.log("drawChart")
 		axios.get("http://localhost:8000/getKeyword")
 			.then(resData => {
 				data = resData.data;
@@ -12,7 +11,6 @@
 	
   
 	keywordDraw = data => {
-		console.log("keywordDraw")
 		const myChart = new FusionCharts({
 			type: "doughnut2d",
 			renderAt: "keyword",

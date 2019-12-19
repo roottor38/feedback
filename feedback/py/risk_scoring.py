@@ -8,7 +8,7 @@ from konlpy.tag import Okt
 from keras.models import load_model
 
 class RiskScoring:
-    def __init__(self, name, host="localhost:9200"):
+    def __init__(self, name, host="192.168.1.3:9200"):
         self.es = Elasticsearch(hosts=host)
         self.name = name
         self.path = os.getcwd() + "/py/"

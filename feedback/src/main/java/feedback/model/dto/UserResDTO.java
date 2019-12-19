@@ -1,22 +1,29 @@
 package feedback.model.dto;
 
-import lombok.AllArgsConstructor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@SuppressWarnings("unchecked")
 public class UserResDTO {
-
-	private String date;
-	private double pos;
-	private double nev;
+	JSONArray dateArray = new JSONArray();
+	JSONArray posArray = new JSONArray();
+	JSONArray negArray = new JSONArray();
 	
-	public UserResDTO(String date) {
-		this.date = date;
+	public void addData(String date, double positive, double negative) {
+		JSONObject day = new JSONObject();
+		JSONObject pos = new JSONObject();
+		JSONObject neg = new JSONObject();
 		
+		day.put("label", date);
+		pos.put("value", positive);
+		neg.put("value", negative);
+		
+		dateArray.add(day);
+		posArray.add(pos);
+		negArray.add(neg);
 	}
 	
-
 }
