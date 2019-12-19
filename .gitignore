@@ -71,3 +71,7 @@ local.properties
 .sts4-cache/
 
 # End of https://www.gitignore.io/api/eclipse
+feedback/py/pos_tag.json
+feedback/py/pos_tag.zip
+feedback/py/.ipynb_checkpoints/dl_model-checkpoint.ipynb
+feedback/py/.ipynb_checkpoints/make_model-checkpoint.ipynb
