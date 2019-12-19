@@ -4,9 +4,10 @@ from konlpy.tag import Okt
 from collections import Counter
 import json
 class WordCount:
-    def __init__(self, name, host="localhost:9200"):
+    def __init__(self, name, host="192.168.1.4:9200"):
         self.es = Elasticsearch(hosts=host)
         self.name = name
+        
     def merge_text(self, date):
         self.date = date
         self.text = reduce(lambda x, y: x + " " + y['_source']['title'] + " " + y['_source']['body'],
