@@ -3,7 +3,7 @@ from time import sleep
 from bs4 import BeautifulSoup
 import re, requests
 class DataCollector:
-    def __init__(self, name, host="localhost:9200"):
+    def __init__(self, name, host="192.168.1.3:9200"):
         self.es = Elasticsearch(hosts=host)
         self.name = name
         self.urls = []
@@ -55,9 +55,9 @@ class DataCollector:
                                 "date" : {"type": "date", "format": "yyyy-MM-dd"}
                             }}
             }
-            self.es.indices.create(index=self.name, body=body)
+            self.es.indices.create(index=self.name, body=body)#인덱스 생성
             print("# 해당 인덱스 생성 완료")
-    def scrape_urls(self, url, pages=10):
+    def scrape_urls(self, url, pages=10):#page는 디폴트로 10
         print("# URL 수집 시작")
         self.lastnum = self.es.count(index=self.name, body={"query" : {"match_all" : {}}})['count']
         if not self.lastnum == 0: 
@@ -97,10 +97,13 @@ class DataCollector:
                 self.es.indices.refresh(index=self.name)
                 print("# 중간 저장")
                 bulk_body.clear()
-        self.es.bulk(index=self.name, body=bulk_body)
-        self.es.indices.refresh(index=self.name)
+        if len(bulk_body) != 0:
+            self.es.bulk(index=self.name, body=bulk_body)
+            self.es.indices.refresh(index=self.name)
         print("# 최종 저장") 
+
+
 collector = DataCollector(name="community_data")
 collector.check_index(opt=False)
-collector.scrape_urls("http://www.inven.co.kr/board/lineagem/5019", pages=60)
+collector.scrape_urls("http://www.inven.co.kr/board/lineagem/5019", pages=100)
 collector.scrape_bodies()
