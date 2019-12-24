@@ -1,6 +1,5 @@
 package feedback.model.dto;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -28,7 +27,7 @@ public class KeywordDTO {
 		JSONObject obj = new JSONObject(); // 임시 JSON object
 		for(Entry<String, Integer> v : data.entrySet().stream() // 
 				.sorted((v1, v2) -> v2.getValue().compareTo(v1.getValue())) // 카운트 된 값들 기준으로 역정렬
-				.limit(10).collect(Collectors.toList())) { // 10개로 끊고 list화 시켜준 다음 for문 돌림
+				.limit(5).collect(Collectors.toList())) { // 10개로 끊고 list화 시켜준 다음 for문 돌림
 			obj.put("label", v.getKey()); // label 값에 key(키워드)
 			obj.put("value", v.getValue()); // value 값에 카운트 된 값
 			arr.add(obj.clone()); // 임시 object를 클론해서 array에 넣고

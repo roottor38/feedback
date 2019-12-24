@@ -1,15 +1,18 @@
 package feedback.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.time.LocalDate;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import feedback.model.dto.RiskDTO;
 import feedback.service.FeedbackDataService;
 
 // Rest API의 URI 규약에 맞춰서 자원 명사화
@@ -19,9 +22,9 @@ public class FeedbackDataController {
 	@Autowired
 	FeedbackDataService dataService;
 
-	@GetMapping("/keyword")
-	public JSONArray getKeyword() throws IOException {
-		return dataService.getKeyword();
+	@PostMapping("/keyword")
+	public JSONArray getKeyword(@RequestBody JSONObject body) throws IOException, ParseException {
+		return dataService.getKeyword(LocalDate.parse(body.get("start").toString()), LocalDate.parse(body.get("end").toString()));
 	}
 	
 	@GetMapping("/vital")
@@ -31,6 +34,7 @@ public class FeedbackDataController {
 	
 	@GetMapping("/risk")
 	public JSONArray getRisk() throws IOException {
+		System.out.println("risk run **********************************************");
 		return dataService.getRisk();
 	}
 

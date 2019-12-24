@@ -1,6 +1,8 @@
 package feedback.service;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.time.LocalDate;
 
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,8 @@ public class FeedbackDataService {
 		return dao.searchRisk().getWeek();
 	}
 
-	public JSONArray getKeyword() throws IOException {
-		return dao.searchKeyword().getArray();
+	public JSONArray getKeyword(LocalDate start, LocalDate end) throws IOException, ParseException {
+		return dao.searchKeyword(start, end).getArray();
 	}
 
 	public JSONArray getVital() throws IOException {

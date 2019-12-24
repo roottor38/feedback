@@ -1,7 +1,9 @@
 package feedback.dao;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.search.SearchRequest;
@@ -32,6 +34,39 @@ public class ElasticSearchDAO {
 				RestClient.builder(new HttpHost("192.168.1.3", 9200, "http"), new HttpHost("192.168.1.3", 9201, "http")));
 	
 	// Risk -> Date, Neg, Pos로 표현된 값 (일별로 구분된 데이터)
+//	public RiskDTO searchRisk() throws IOException {
+//		String indexName = "community_data"; // 차후 properties로
+//		String field = "risk";
+//		// request (ES로 요청 보내기)
+//		SearchRequest request = new SearchRequest(indexName);
+//		// aggregation 설정
+//		String histName = "date_his";
+//		SearchSourceBuilder srcBuilder = new SearchSourceBuilder();
+//		srcBuilder.query(QueryBuilders.rangeQuery("date").gte("2019-10-15").lte("2019-10-19"));
+//		
+//		AggregationBuilder aggBuilder =
+//			AggregationBuilders.dateHistogram(histName)
+//					.field("date").dateHistogramInterval(DateHistogramInterval.days(1))
+//					.subAggregation(AggregationBuilders.sum(field).field(field));
+//		SearchSourceBuilder test = srcBuilder.aggregation(aggBuilder);
+//		System.out.println(test);
+//		// date_his라는 이름의 1일씩 나눈 histogram aggregation 설정 (agg만 받기에 size = 0) => risk값 합산 요청
+//		request.source(new SearchSourceBuilder().size(0).aggregation(aggBuilder));
+//		// response (ES로부터 응답 받기)
+//		//SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+//		//ParsedDateHistogram dateHist = response.getAggregations().get(histName);
+//		// DTO로 리턴
+//		RiskDTO risk = new RiskDTO();
+//		// 반환값 대상 형변환 필요한 경우 많음 (주의)
+//		dateHist.getBuckets().stream() // date별로 구분된 buckets들을 받아서 처리
+//			.forEach(v -> risk.addData(v.getKeyAsString(),  // 우선 String으로 표현된 날짜들을 받고
+//				((double)v.getDocCount() - ((ParsedSum)v.getAggregations().getAsMap().get(field)).getValue()), // 긍정 값
+//				((ParsedSum)v.getAggregations().getAsMap().get(field)).getValue())); // 부정 값
+//		return risk;
+//	}
+//	
+	
+	
 	public RiskDTO searchRisk() throws IOException {
 		String indexName = "community_data"; // 차후 properties로
 		String field = "risk";
@@ -59,13 +94,20 @@ public class ElasticSearchDAO {
 	}
 	
 	// Keyword -> 많이 언급된 명사들 데이터 (일별) => 최근 일주일 데이터 합산해서 제공해야 함
-	public KeywordDTO searchKeyword() throws IOException {
+	public KeywordDTO searchKeyword(LocalDate start, LocalDate end) throws IOException, ParseException {
 		String indexName = "community_data_analysis"; // 차후 properties로
+
+		ArrayList<LocalDate> dateArray = new ArrayList<>();
+		
+		for (LocalDate date = start; date.isBefore(end.plusDays(1)); date = date.plusDays(1)) {
+			dateArray.add(date);
+	    }
+		
 		// request (ES로 요청 보내기)
 		SearchRequest request = new SearchRequest(indexName);
 		// Search DSL 구성
 		SearchSourceBuilder srcBuilder = new SearchSourceBuilder();
-		srcBuilder.query(QueryBuilders.matchAllQuery());
+		srcBuilder.query(QueryBuilders.termsQuery("_id", dateArray));
 		// 여기서는 match all => Overloading으로 일별 조회 구현
 		request.source(srcBuilder);
 		// response (ES로부터 응답 받기)
@@ -73,16 +115,11 @@ public class ElasticSearchDAO {
 		// DTO로 리턴
 		KeywordDTO keyword = new KeywordDTO();
 		SearchHit[] hitArr = response.getHits().getHits();
-		// Risk 구문 참조하여 오늘 이전 최근 7일 데이터 합산할 수 있도록 수정 예정
-		int len = hitArr.length;
-		for(SearchHit hit : Arrays.copyOfRange(hitArr, len - 8, len - 1)) {
+		for(SearchHit hit : hitArr) {
 			hit.getSourceAsMap().entrySet().parallelStream()
 			.sorted((a, b) -> Integer.parseInt(b.getValue().toString()) - Integer.parseInt(a.getValue().toString()))
 			.forEach(v -> keyword.addData(v.getKey().toString(), v.getValue().toString()));
 		}
-//		hitArr[hitArr.length - 1].getSourceAsMap().entrySet().parallelStream()
-//		.sorted((a, b) -> Integer.parseInt(b.getValue().toString()) - Integer.parseInt(a.getValue().toString()))
-//		.limit(10).forEach(v -> keyword.addData(v.getKey().toString(), v.getValue().toString()));
 		return keyword;
 	}
 	

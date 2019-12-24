@@ -1,7 +1,9 @@
 var dayMinus1 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-1), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
 (function drawPosNegChart() {
+	try {
 	axios.get("http://localhost:8000/risk")
 		.then(resData => {
+			console.log(resData.data)
 			let getres = resData.data;
 			let category = getres[0];
 			let pos = getres[1];
