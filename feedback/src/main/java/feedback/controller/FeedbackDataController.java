@@ -34,8 +34,11 @@ public class FeedbackDataController {
 	
 	@GetMapping("/risk")
 	public JSONArray getRisk() throws IOException {
-		System.out.println("risk run **********************************************");
 		return dataService.getRisk();
 	}
-
+	
+	@PostMapping("/text")
+	public JSONArray getText(@RequestBody JSONObject body) throws IOException {
+		return dataService.getText(LocalDate.parse(body.get("start").toString()), LocalDate.parse(body.get("end").toString()), body.get("community").toString());
+	}
 }

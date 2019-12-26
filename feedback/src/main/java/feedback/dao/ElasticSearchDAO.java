@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -20,6 +21,8 @@ import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInter
 import org.elasticsearch.search.aggregations.bucket.histogram.ParsedDateHistogram;
 import org.elasticsearch.search.aggregations.metrics.ParsedSum;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
+import org.json.simple.JSONArray;
 import org.springframework.stereotype.Component;
 
 import feedback.model.dto.KeywordDTO;
@@ -32,6 +35,29 @@ public class ElasticSearchDAO {
 	// 한 번 Client 생성해서 계속 재사용 (굳이 Close X)
 	private RestHighLevelClient client = new RestHighLevelClient(
 				RestClient.builder(new HttpHost("192.168.1.3", 9200, "http"), new HttpHost("192.168.1.3", 9201, "http")));
+	
+	@SuppressWarnings("unchecked")
+	public JSONArray searchText(LocalDate start, LocalDate end, String community) throws IOException {
+		String indexName = "community_data"; // 차후 properties로
+		
+		SearchSourceBuilder srcBuilder = new SearchSourceBuilder();
+		srcBuilder.size(1);
+		srcBuilder.query(QueryBuilders.matchQuery(community, "리니지M 인벤"));
+		srcBuilder.query(QueryBuilders.rangeQuery("date").gte(start).lte(end));
+		srcBuilder.sort("recommand", SortOrder.DESC);
+		srcBuilder.sort("commments", SortOrder.DESC);
+		srcBuilder.sort("hits", SortOrder.DESC);
+		SearchRequest request = new SearchRequest(indexName);
+		
+		request.source(srcBuilder);
+		SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+		SearchHit[] hitArr = response.getHits().getHits();
+		
+		JSONArray text = new JSONArray();
+		text.add(hitArr[0].getSourceAsMap());
+		
+		return text;
+	}
 	
 	// Risk -> Date, Neg, Pos로 표현된 값 (일별로 구분된 데이터)
 //	public RiskDTO searchRisk() throws IOException {
@@ -96,9 +122,7 @@ public class ElasticSearchDAO {
 	// Keyword -> 많이 언급된 명사들 데이터 (일별) => 최근 일주일 데이터 합산해서 제공해야 함
 	public KeywordDTO searchKeyword(LocalDate start, LocalDate end) throws IOException, ParseException {
 		String indexName = "community_data_analysis"; // 차후 properties로
-
 		ArrayList<LocalDate> dateArray = new ArrayList<>();
-		
 		for (LocalDate date = start; date.isBefore(end.plusDays(1)); date = date.plusDays(1)) {
 			dateArray.add(date);
 	    }

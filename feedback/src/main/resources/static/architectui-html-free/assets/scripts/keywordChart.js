@@ -2,10 +2,7 @@ var dayMinus1 = (function formatDate() { var d = new Date(), month = '' + (d.get
 var dayMinus2 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-2), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
 
 (function drawKeywordChart() {
-	//let body = '{"start": ' +'"'+ dayMinus1 +'"'+ ', "end" : ' +'"'+ dayMinus2 +'"'+ '}'
-	//let body = { start : dayMinus1, end : dayMinus2};
 	let body = JSON.stringify({ start : dayMinus1, end : dayMinus2});
-	console.log(body)
 		axios.post("http://localhost:8000/keyword", JSON.parse(body))
 			.then(resData => {
 				data = resData.data;
