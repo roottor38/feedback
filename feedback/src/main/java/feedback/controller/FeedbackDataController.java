@@ -8,7 +8,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,18 +26,18 @@ public class FeedbackDataController {
 		return dataService.getKeyword(LocalDate.parse(body.get("start").toString()), LocalDate.parse(body.get("end").toString()));
 	}
 	
-	@GetMapping("/vital")
-	public JSONArray getVital() throws IOException {
-		return dataService.getVital();
-	}
-	
-	@GetMapping("/risk")
-	public JSONArray getRisk() throws IOException {
-		return dataService.getRisk();
+	@PostMapping("/risk")
+	public JSONArray getRisk(@RequestBody JSONObject body) throws IOException {
+		return dataService.getRisk(LocalDate.parse(body.get("start").toString()), LocalDate.parse(body.get("end").toString()));
 	}
 	
 	@PostMapping("/text")
 	public JSONArray getText(@RequestBody JSONObject body) throws IOException {
 		return dataService.getText(LocalDate.parse(body.get("start").toString()), LocalDate.parse(body.get("end").toString()), body.get("community").toString());
 	}
+	
+//	@GetMapping("/vital")
+//	public JSONArray getVital() throws IOException {
+//		return dataService.getVital();
+//	}
 }
