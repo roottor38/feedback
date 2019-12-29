@@ -26,7 +26,6 @@ public class ElasticSearchRequest {
 		srcBuilder.sort("commments", SortOrder.DESC);
 		srcBuilder.sort("hits", SortOrder.DESC);
 		
-		
 		return request;
 	}
 	
@@ -35,12 +34,11 @@ public class ElasticSearchRequest {
 		SearchRequest request = new SearchRequest("community_data");
 		
 		srcBuilder.query(QueryBuilders.rangeQuery("date").gte(start).lte(end));
-		AggregationBuilder aggBuilder =
-				AggregationBuilders.dateHistogram(histName)
+		AggregationBuilder aggBuilder =AggregationBuilders.dateHistogram(histName)
 						.field("date").dateHistogramInterval(DateHistogramInterval.days(1))
 						.subAggregation(AggregationBuilders.sum(field).field(field));
-			srcBuilder.aggregation(aggBuilder).size(0);
 		
+		srcBuilder.aggregation(aggBuilder).size(0);
 		request.source(srcBuilder);
 		
 		return request;
