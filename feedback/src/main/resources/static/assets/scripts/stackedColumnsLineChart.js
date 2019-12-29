@@ -1,7 +1,10 @@
+<<<<<<< HEAD:feedback/src/main/resources/static/architectui-html-free/assets/scripts/stackedColumnsLineChart.js
 //var dayMinus1 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-1), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
 var dayMinus1 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-9), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
 var dayMinus2 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-2), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
 
+=======
+>>>>>>> feature/commentTable:feedback/src/main/resources/static/assets/scripts/stackedColumnsLineChart.js
 (function drawPosNegChart() {
 	let body = JSON.stringify({ start : dayMinus1, end : dayMinus2});
 	axios.post("http://localhost:8000/risk", JSON.parse(body))
@@ -20,14 +23,14 @@ var dayMinus2 = (function formatDate() { var d = new Date(), month = '' + (d.get
 	posNegDraw = (category, pos, neg) => {
 	var myChart = new FusionCharts({
 		type: "stackedcolumn2dline",
-		renderAt: "chart-container",
+		renderAt: "PosNeg",
 		width: "100%",
 		height: "100%",
 		dataFormat: "json",
 		dataSource: {
 			chart: {
 				showvalues: "0",
-				caption: dayMinus1,
+				caption: "",
 				subcaption: "",
 				numberprefix: "",
 				numbersuffix: "",

@@ -20,7 +20,7 @@ public class FeedbackDataService {
 		return dao.searchRisk(start, end).getWeek();
 	}
 
-	public JSONArray getKeyword(LocalDate start, LocalDate end ) throws IOException, ParseException {
+	public JSONArray getKeyword(LocalDate start, LocalDate end) throws IOException, ParseException {
 		return dao.searchKeyword(start, end).getArray();
 	}
 

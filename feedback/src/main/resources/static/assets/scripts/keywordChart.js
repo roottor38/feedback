@@ -1,4 +1,4 @@
-var dayMinus1 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-9), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
+var dayMinus1 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-2), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
 var dayMinus2 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-2), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
 
 (function drawKeywordChart() {
@@ -6,16 +6,15 @@ var dayMinus2 = (function formatDate() { var d = new Date(), month = '' + (d.get
 		axios.post("http://localhost:8000/keyword", JSON.parse(body))
 			.then(resData => {
 				data = resData.data;
-				keywordDraw(data)
+				keywordDraw(data);
 			})
 		.catch(error => {
 			console.log("비정상 응답", error);
 		});
 	}());
 	
-  
 	keywordDraw = data => {
-		const myChart = new FusionCharts({
+		let myChart = new FusionCharts({
 			type: "doughnut2d",
 			renderAt: "keyword",
 			width: "100%",
@@ -23,10 +22,10 @@ var dayMinus2 = (function formatDate() { var d = new Date(), month = '' + (d.get
 			dataFormat: "json",
 			dataSource: {
 				chart: {
-					caption: "리니지M 키워드",
-					subcaption: "최근 일주일 합산 상위 10개 데이터",
+					caption: "Top5 Weekly Keyword ",
+					subcaption: "Top 5",
 					showpercentvalues: "1",
-					defaultcenterlabel: "인벤",
+					defaultcenterlabel: "Keyword",
 					aligncaptionwithcanvas: "0",
 					captionpadding: "0",
 					decimals: "1",
