@@ -105,5 +105,5 @@ class DataCollector:
 
 collector = DataCollector(name="community_data")
 collector.check_index(opt=False)
-collector.scrape_urls("http://www.inven.co.kr/board/lineagem/5019", pages=200)
+collector.scrape_urls("http://www.inven.co.kr/board/lineagem/5019", pages=60)
 collector.scrape_bodies()
