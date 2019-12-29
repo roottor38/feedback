@@ -1,4 +1,3 @@
-var dayMinus1 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-1), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
 (function drawPosNegChart() {
 	axios.get("http://localhost:8000/risk")
 		.then(resData => {
@@ -16,14 +15,14 @@ var dayMinus1 = (function formatDate() { var d = new Date(), month = '' + (d.get
 	posNegDraw = (category, pos, neg) => {
 	var myChart = new FusionCharts({
 		type: "stackedcolumn2dline",
-		renderAt: "chart-container",
+		renderAt: "PosNeg",
 		width: "100%",
 		height: "100%",
 		dataFormat: "json",
 		dataSource: {
 			chart: {
 				showvalues: "0",
-				caption: dayMinus1,
+				caption: "",
 				subcaption: "",
 				numberprefix: "",
 				numbersuffix: "",

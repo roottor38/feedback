@@ -11,7 +11,7 @@ class RiskScoring:
     def __init__(self, name, host="192.168.1.3:9200"):
         self.es = Elasticsearch(hosts=host)
         self.name = name
-        self.path = os.getcwd() + "/py/"
+        self.path = os.getcwd() + "/"
     def read_data(self):
         # es index 내의 doc 갯수를 불러온다
         self.doc_count = self.es.count(index=self.name)
@@ -20,7 +20,7 @@ class RiskScoring:
             for source in [self.es.get(index=self.name, id=i)['_source']\
                 for i in range(1, self.doc_count['count'] + 1)]]
     def risk_score(self):
-        model = load_model(self.path + "model.h5")
+        model = load_model(self.path + "model.v2")
         okt = Okt()
         with open(self.path + "word_index.json", encoding="utf-8-sig") as f:
             word_index = json.load(f)

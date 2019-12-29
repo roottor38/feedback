@@ -47,9 +47,10 @@ public class ElasticSearchDAO {
 		srcBuilder.sort("recommand", SortOrder.DESC);
 		srcBuilder.sort("commments", SortOrder.DESC);
 		srcBuilder.sort("hits", SortOrder.DESC);
-		SearchRequest request = new SearchRequest(indexName);
 		
+		SearchRequest request = new SearchRequest(indexName);
 		request.source(srcBuilder);
+		
 		SearchResponse response = client.search(request, RequestOptions.DEFAULT);
 		SearchHit[] hitArr = response.getHits().getHits();
 		
