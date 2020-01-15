@@ -25,5 +25,6 @@ public class FeedbackPageController {
 	public String activeChart() {
 		return "activeChart.html";
 	}
+	
 
 }
