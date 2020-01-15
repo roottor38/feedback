@@ -1,14 +1,14 @@
 var dayMinus1 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-18), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
 var dayMinus2 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-11), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
-
+var url = null;
 
 (function invenText() {
-	let body = JSON.stringify({"community": "리니지M 인벤", "start" : dayMinus1, "end" : dayMinus2});
+	let body = JSON.stringify({"community": "리니지M 인벤", start : "2019-12-01", end : "2019-12-07"});
 	axios.post("http://localhost:8000/text", JSON.parse(body))
 		.then(resData => {
-			let invenText = resData.data;
+			var invenText = resData.data;
 			document.getElementById("invenText").innerHTML = invenText[0].title;
-			var invenURL = invenText[0].url;
+			url = invenText[0].url
 		})
 	.catch(error => {
 		console.log("비정상 응답", error);
@@ -16,11 +16,11 @@ var dayMinus2 = (function formatDate() { var d = new Date(), month = '' + (d.get
 }());
 
 function invenPostOpen(invenURL) {
-    var win = window.open('http://www.inven.co.kr/board/lineagem/5019/200283', '_blank');
+    var win = window.open(url, '_blank');
     win.focus();
 }
 
-(function homeText() {
+/*(function homeText() {
 	let body = JSON.stringify({"community": "리니지M 인벤", "start" : dayMinus1, "end" : dayMinus2});
 	axios.post("http://localhost:8000/text", JSON.parse(body))
 		.then(resData => {
@@ -57,4 +57,4 @@ function invenPostOpen(invenURL) {
 	.catch(error => {
 		console.log("비정상 응답", error);
 	});
-}());
+}());*/

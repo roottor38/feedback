@@ -1,8 +1,6 @@
-//var dayMinus1 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-1), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
-var dayMinus1 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-9), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
-var dayMinus2 = (function formatDate() { var d = new Date(), month = '' + (d.getMonth() + 1), day = '' + (d.getDate()-2), year = d.getFullYear(); if (month.length < 2) month = '0' + month; if (day.length < 2) day = '0' + day; return [year, month, day].join('-'); }());
+
 (function drawPosNegChart() {
-	let body = JSON.stringify({ start : dayMinus1, end : dayMinus2});
+	let body = JSON.stringify({ start : "2019-12-01", end : "2019-12-07" });
 	axios.post("http://localhost:8000/risk", JSON.parse(body))
 		.then(resData => {
 			let getres = resData.data;
@@ -15,7 +13,7 @@ var dayMinus2 = (function formatDate() { var d = new Date(), month = '' + (d.get
 		console.log("비정상 응답", error);
 	})
 }());
-	
+
 	posNegDraw = (category, pos, neg) => {
 	var myChart = new FusionCharts({
 		type: "stackedcolumn2dline",

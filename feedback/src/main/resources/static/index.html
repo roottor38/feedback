@@ -403,8 +403,55 @@
 									</button>
 									<div id="reportrange" style="background: #fff; cursor: pointer; border-radius: 5px; margin-top: 5px; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
     									<i class="fa fa-calendar"></i>&nbsp;
-    									<span></span> <i class="fa fa-caret-down"></i>
+    									<span id="day"></span> <i class="fa fa-caret-down"></i>
 									</div>
+									<script type="text/javascript">
+									function drawPosNegChart2() {
+										var startDay = document.getElementById("startDay").value;
+										var endDay = document.getElementById("endDay").value;
+										let body = JSON.stringify({ start : startDay, end : endDay });
+										axios.post("http://localhost:8000/risk", JSON.parse(body))
+											.then(resData => {
+												let getres = resData.data;
+												let category = getres[0];
+												let pos = getres[1];
+												let neg = getres[2];
+												posNegDraw(category, pos, neg);
+												drawKeywordChart(startDay, endDay);
+											})
+										.catch(error => {
+											console.log("비정상 응답", error);
+										})
+									}
+									function drawKeywordChart(startDay, endDay) {
+										let body = JSON.stringify({ start : startDay, end : endDay});
+											axios.post("http://localhost:8000/keyword", JSON.parse(body))
+												.then(resData => {
+													data = resData.data;
+													keywordDraw(data);
+													invenText(startDay, endDay);
+												})
+											.catch(error => {
+												console.log("비정상 응답", error);
+											});
+										};
+									function invenText(startDay, endDay) {
+											let body = JSON.stringify({"community": "리니지M 인벤", start : startDay, end : endDay});
+										console.log(body)
+											axios.post("http://localhost:8000/text", JSON.parse(body))
+												.then(resData => {
+													var invenText = resData.data;
+													document.getElementById("invenText").innerHTML = invenText[0].title;
+													url = invenText[0].url
+												})
+											.catch(error => {
+												console.log("비정상 응답", error);
+											});
+										};
+									</script>
+									시작 날짜 : <input type="Text" id="startDay">
+									종료 날짜 : <input type="Text" id="endDay">
+									<button onclick="drawPosNegChart2()">검색</button>
 									<div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
 										<ul class="nav flex-column">
 											<li class="nav-item">
@@ -683,8 +730,8 @@
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-	
 	<script type="text/javascript" src="./assets/scripts/main.js"></script>
+	
 	
 </body>
 </html>
